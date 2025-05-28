@@ -6,6 +6,12 @@ Cray-Keycloak-users-localize
 
 This chart runs the keycloak-setup docker image from [keycloak-installer](https://github.com/Cray-HPE/keycloak-installer) to run the [keycloak_localize.py](https://github.com/Cray-HPE/keycloak-installer/blob/master/keycloak_setup/keycloak_localize.py) script.
 
+### Updating the Docker Image
+
+Please update and create the change in the keycloak-installer repo. Once that is released then
+change the chart version, and the app version in the Chart.yaml file. Also update the image
+tag in the Values file.
+
 ## Contributing
 
 See the [CONTRIBUTING.md](CONTRIBUTING.md) file for how to contribute to this project.

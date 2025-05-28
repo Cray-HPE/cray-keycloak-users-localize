@@ -21,16 +21,27 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-apiVersion: v2
-appVersion: 3.9.0
-name: cray-keycloak-users-localize
-version: 1.11.7
-description: Customizes Keycloak deployment
-keywords:
-- keycloak
-- keycloak-users-localize
-home: https://github.com/Cray-HPE/cray-keycloak-users-localize
-maintainers:
-- name: ndavidson-hpe
-annotations:
-  artifacthub.io/license: MIT
+name: Lint, test, and scan Helm charts
+on:
+  pull_request:
+    branches:
+      - master
+      - release/**
+  workflow_dispatch:
+jobs:
+  lint-test-scan:
+    uses: Cray-HPE/.github/.github/workflows/charts-lint-test-scan.yml@main
+    with:
+      scan-image-snyk-args: "--severity-threshold=high"
+      lint-charts: ${{ github.event_name == 'pull_request' }}
+      ct-config: |
+        chart-dirs:
+          - kubernetes
+        validate-maintainers: false
+      scan-chart-snyk-args: "--severity-threshold=high --policy-path=kubernetes/.snyk"
+      scan-images: false
+    secrets:
+      snyk-token: ${{ secrets.SNYK_TOKEN }}
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+      artifactory-username: ${{ secrets.ARTIFACTORY_ALGOL60_READONLY_USERNAME }}
+      artifactory-password: ${{ secrets.ARTIFACTORY_ALGOL60_READONLY_TOKEN }}
